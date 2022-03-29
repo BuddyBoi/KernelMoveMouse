@@ -58,7 +58,7 @@ typedef struct _LDR_DATA_TABLE_ENTRY
 } LDR_DATA_TABLE_ENTRY, * PLDR_DATA_TABLE_ENTRY;
 
 
-//excluded kernel functions
+//undefined kernel functions
 extern "C"
 {
     __declspec(dllimport) PLIST_ENTRY NTAPI PsLoadedModuleList;
