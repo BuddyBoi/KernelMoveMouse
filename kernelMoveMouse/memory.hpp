@@ -25,7 +25,7 @@ namespace memory
 		return NULL;
 	}
 
-	//get process module
+	//get kernel module
 	PLDR_DATA_TABLE_ENTRY system_module( const wchar_t* module_name )
 	{
 		static const auto ntoskrnl_base = *reinterpret_cast<const char**>(std::uintptr_t( PsLoadedModuleList ) + 0x30);
