@@ -1,0 +1,77 @@
+;
+; kernelMoveMouse.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System ; TODO: specify appropriate Class
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=kernelMoveMouse.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+kernelMoveMouse_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+kernelMoveMouse.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%kernelMoveMouse.DeviceDesc%=kernelMoveMouse_Device, Root\kernelMoveMouse ; TODO: edit hw-id
+
+[kernelMoveMouse_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+kernelMoveMouse.sys
+
+;-------------- Service installation
+[kernelMoveMouse_Device.NT.Services]
+AddService = kernelMoveMouse,%SPSVCINST_ASSOCSERVICE%, kernelMoveMouse_Service_Inst
+
+; -------------- kernelMoveMouse driver install sections
+[kernelMoveMouse_Service_Inst]
+DisplayName    = %kernelMoveMouse.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\kernelMoveMouse.sys
+
+;
+;--- kernelMoveMouse_Device Coinstaller installation ------
+;
+
+[kernelMoveMouse_Device.NT.CoInstallers]
+AddReg=kernelMoveMouse_Device_CoInstaller_AddReg
+CopyFiles=kernelMoveMouse_Device_CoInstaller_CopyFiles
+
+[kernelMoveMouse_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[kernelMoveMouse_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[kernelMoveMouse_Device.NT.Wdf]
+KmdfService =  kernelMoveMouse, kernelMoveMouse_wdfsect
+[kernelMoveMouse_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+DiskName = "kernelMoveMouse Installation Disk"
+kernelMoveMouse.DeviceDesc = "kernelMoveMouse Device"
+kernelMoveMouse.SVCDESC = "kernelMoveMouse Service"
