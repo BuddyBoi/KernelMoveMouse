@@ -1,2 +1,2 @@
 # KernelMoveMouse
-If you are trying to subvert a security system, I would recommend a relative alternative to hooking the mouse driver.
+This is only an example, this will not subvert any decent security system, and this only works well with modify current mouse-moves. I.E it's better for relative adjustments of current movements. It isn't good as being a SetPosition
